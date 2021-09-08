@@ -30,17 +30,16 @@ class Trie:
 
     def insert(self, word: str):
         """Inserts a new word into the Trie."""
-        current = self.root
-        for character in word:
+        def callback(character, current):
             child = current.get_child_with(character)
             if child:
-                current = child
-            else:
-                new_node = TrieNode(character)
-                current.add_child(new_node)
-                current = new_node
+                return child
+            new_node = TrieNode(character)
+            current.add_child(new_node)
+            return new_node
         
-        current.is_terminal = True
+        leaf = self._traverse_word(word, callback)
+        leaf.is_terminal = True
 
     def delete(self, word: str):
         """Deletes a given word from the Trie."""

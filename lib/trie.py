@@ -10,7 +10,7 @@ class TrieNode:
         """Adds a node to the collection of children."""
         self.children[node.character] = node
     
-    def get_child_with(self, character: str) -> TrieNode:
+    def get_child_with(self, character: str) -> TrieNode | None:
         """Return the node with the given character value, or None if none exist."""
         return self.children.get(character)
 
@@ -38,32 +38,36 @@ class Trie:
 
     def search(self, word: str) -> bool:
         """Returns whether or not a given word exists in the Trie."""
-        leaf = self._traverse_word(word)
+        leaf = self.get_leaf(word)
         return leaf is not None and leaf.is_terminal
+
+    def get_leaf(self, word: str) -> TrieNode | None:
+        """Returns the leaf node of the given word in the Trie, if it exists."""
+        def callback(character, current):
+            return current.get_child_with(character)
+
+        return self._traverse_word(word, callback)
 
     def delete(self, word: str):
         """Deletes a given word from the Trie."""
-        current = self.root
         stack = []
 
-        for character in word:
+        def callback(character, current):
             # If we end up deleting a word that has a prefix present in the Trie,
             # we need to preserve that prefix. So we clear the stack of nodes to
             # delete whenever we encounter a terminal node.
             if current.is_terminal:
                 stack.clear()
-
             stack.append(current)
-            child = current.get_child_with(character)
-            if not child:
-                return
-            current = child
+            return current.get_child_with(character)
+        
+        leaf = self._traverse_word(word, callback)
 
         # If the last node in the word has children, that means that a longer
         # word exists in the Trie with the word we are deleting as a prefix.
         # In this case, we do not want to actually delete the nodes.
-        if current.has_children():
-            current.is_terminal = False
+        if leaf.has_children():
+            leaf.is_terminal = False
         else:
             i = len(word) - 1
             while i >= 0 and len(stack) > 0:
@@ -92,12 +96,15 @@ class Trie:
 
         return prefix[:last_terminal + 1]
 
-    def _traverse_word(self, word: str) -> TrieNode:
+    def _traverse_word(self, word: str, callback: function) -> TrieNode | None:
+        """
+        Helper method for hooking into the traversal algorithm
+        with custom callback functions.
+        """
         current = self.root
         for character in word:
-            child = current.get_child_with(character)
-            if not child:
+            current = callback(character, current)
+            if not current:
                 return None
-            current = child
-        
+
         return current

@@ -40,7 +40,7 @@ class TestTrie(unittest.TestCase):
         trie.delete('helloworld')
         self.assertFalse(trie.search('helloworld'))
         self.assertTrue(trie.search('hello'))
-        self.assertTrue(not trie._traverse_word('hello').has_children())
+        self.assertTrue(not trie.get_leaf('hello').has_children())
 
     def test_longest_prefix(self):
         trie = Trie()

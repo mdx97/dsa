@@ -6,6 +6,7 @@ class TrieNode:
         self.character = character
         self.children = {}
         self.is_terminal = False
+        self.count = 1
     
     def add_child(self, node: TrieNode):
         """Adds a node to the collection of children."""
@@ -33,6 +34,7 @@ class Trie:
         def callback(character, current):
             child = current.get_child_with(character)
             if child:
+                child.count += 1
                 return child
             new_node = TrieNode(character)
             current.add_child(new_node)

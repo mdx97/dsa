@@ -10,6 +10,27 @@ class TestTrie(unittest.TestCase):
         self.assertTrue(trie.search('world'))
         self.assertFalse(trie.search('foobar'))
 
+    def test_insert_counts(self):
+        counts = []
+        def callback(character, current):
+            counts.append(current.count)
+            return current.get_child_with(character)
+        
+        trie = Trie()
+        trie.insert('hello')
+        trie.insert('hel')
+        leaf = trie._traverse_word('hello', callback)
+
+        # The callback does not run for the leaf value but we still
+        # want to assert that its count value is correct.
+        counts.append(leaf.count)
+
+        # The callback will count the root node value as well,
+        # which we do not care about.
+        counts = counts[1:]
+
+        self.assertListEqual([2, 2, 2, 1, 1], counts)
+    
     def test_search_does_not_match_substring(self):
         trie = Trie()
         trie.insert('helloworldandallwhoinhabitit')

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Callable
 
 class TrieNode:
     def __init__(self, character=None):
@@ -22,6 +23,11 @@ class Trie:
     def __init__(self):
         self.root = TrieNode()
 
+    def search(self, word: str) -> bool:
+        """Returns whether or not a given word exists in the Trie."""
+        leaf = self.get_leaf(word)
+        return leaf is not None and leaf.is_terminal
+
     def insert(self, word: str):
         """Inserts a new word into the Trie."""
         current = self.root
@@ -35,18 +41,6 @@ class Trie:
                 current = new_node
         
         current.is_terminal = True
-
-    def search(self, word: str) -> bool:
-        """Returns whether or not a given word exists in the Trie."""
-        leaf = self.get_leaf(word)
-        return leaf is not None and leaf.is_terminal
-
-    def get_leaf(self, word: str) -> TrieNode | None:
-        """Returns the leaf node of the given word in the Trie, if it exists."""
-        def callback(character, current):
-            return current.get_child_with(character)
-
-        return self._traverse_word(word, callback)
 
     def delete(self, word: str):
         """Deletes a given word from the Trie."""
@@ -75,6 +69,12 @@ class Trie:
                 del parent.children[word[i]]
                 i -= 1
     
+    def get_leaf(self, word: str) -> TrieNode | None:
+        """Returns the leaf node of the given word in the Trie, if it exists."""
+        return self._traverse_word(
+            word,
+            lambda character, current: current.get_child_with(character))
+
     def longest_prefix(self, word: str) -> str:
         """Returns the longest prefix of the given word, if one exists."""
         current = self.root

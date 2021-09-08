@@ -1,4 +1,4 @@
-from .trie import Trie
+from .trie import Trie, shortest_unique_prefix
 import unittest
 
 class TestTrie(unittest.TestCase):
@@ -70,6 +70,16 @@ class TestTrie(unittest.TestCase):
         self.assertEqual('helloworld', trie.longest_prefix('helloworld'))
         self.assertEqual('helloworld', trie.longest_prefix('helloworldandallwhoinhabitit'))
         self.assertIsNone(trie.longest_prefix('foobar'))
+
+class TestTrieFunctions(unittest.TestCase):
+    def test_shortest_unique_prefix(self):
+        trie = Trie()
+        trie.insert('zebra')
+        trie.insert('dog')
+        trie.insert('duck')
+        trie.insert('dove')
+        prefixes = shortest_unique_prefix(trie)
+        self.assertCountEqual(['dog', 'dov', 'du', 'z'], prefixes)
 
 if __name__ == '__main__':
     unittest.main()

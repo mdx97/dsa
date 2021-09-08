@@ -2,11 +2,11 @@ from __future__ import annotations
 from typing import Callable
 
 class TrieNode:
-    def __init__(self, character=None):
+    def __init__(self, character='', count=1):
         self.character = character
         self.children = {}
         self.is_terminal = False
-        self.count = 1
+        self.count = count
     
     def add_child(self, node: TrieNode):
         """Adds a node to the collection of children."""
@@ -22,7 +22,7 @@ class TrieNode:
 
 class Trie:
     def __init__(self):
-        self.root = TrieNode()
+        self.root = TrieNode(count=0)
 
     def search(self, word: str) -> bool:
         """Returns whether or not a given word exists in the Trie."""
@@ -109,3 +109,20 @@ class Trie:
                 return None
 
         return current
+
+# https://www.geeksforgeeks.org/find-all-shortest-unique-prefixes-to-represent-each-word-in-a-given-list/
+def shortest_unique_prefix(trie: Trie) -> list[str]:
+    """Returns a list of the shortest unique prefixes in the Trie."""
+    prefixes = []
+
+    def dfs(node: TrieNode, running_string: str):
+        new_string = running_string + node.character
+        if node.count == 1:
+            prefixes.append(new_string)
+            return
+
+        for child in node.children.values():
+            dfs(child, new_string)
+
+    dfs(trie.root, "")
+    return prefixes

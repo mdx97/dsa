@@ -1,5 +1,6 @@
 import copy
 import itertools
+from .types import Fraction
 
 def activity_selection_brute(start: list[int], finish: list[int]) -> list[int]:
     """
@@ -61,33 +62,11 @@ def activity_selection_greedy(start: list[int], finish: list[int]) -> list[int]:
 
     return idxs
 
-class Fraction:
-    def __init__(self, numerator: int, denominator: int):
-        self.numerator = numerator
-        self.denominator = denominator
-
-    def __le__(self, other):
-        return self.numerator * other.denominator <= other.numerator * self.denominator
-
-    def __sub__(self, other):
-        common_denominator = self.denominator * other.denominator
-        self_numerator = self.numerator * other.denominator
-        other_numerator = other.numerator * self.denominator
-        return _simplify_fraction(Fraction(self_numerator - other_numerator, common_denominator))
-
-    def __str__(self):
-        return f'{self.numerator}/{self.denominator}'
-
-def _simplify_fraction(fraction: Fraction) -> Fraction:
-    """Returns a mathematically simplified version of the given Fraction."""
-    # TODO: Actually simplify.
-    return copy.copy(fraction)
-
 def egyptian_fractions(fraction: Fraction) -> list[Fraction]:
     """
-    Computes the \"Egyptian Fractions\" for a given Fraction.
+    Computes the "Egyptian Fractions" for a given Fraction.
     This can be defined as the list of unit fractions (fractions with a
-    numerator of 1) that compose the given fraction.
+    numerator of 1) whose sum equals the given fraction.
     """
     temp = copy.copy(fraction)
     candidate = Fraction(1, 2)

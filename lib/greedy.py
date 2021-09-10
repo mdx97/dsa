@@ -79,10 +79,16 @@ class Fraction:
         return f'{self.numerator}/{self.denominator}'
 
 def _simplify_fraction(fraction: Fraction) -> Fraction:
+    """Returns a mathematically simplified version of the given Fraction."""
     # TODO: Actually simplify.
     return copy.copy(fraction)
 
 def egyptian_fractions(fraction: Fraction) -> list[Fraction]:
+    """
+    Computes the \"Egyptian Fractions\" for a given Fraction.
+    This can be defined as the list of unit fractions (fractions with a
+    numerator of 1) that compose the given fraction.
+    """
     temp = copy.copy(fraction)
     candidate = Fraction(1, 2)
     components = []

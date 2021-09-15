@@ -1,6 +1,6 @@
 import copy
 import itertools
-from .types import Fraction
+from .fraction import Fraction
 
 def activity_selection_brute(start: list[int], finish: list[int]) -> list[int]:
     """

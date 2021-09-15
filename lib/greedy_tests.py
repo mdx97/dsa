@@ -1,5 +1,6 @@
 import unittest
-from .greedy import Fraction, activity_selection_brute, activity_selection_greedy, egyptian_fractions
+from .greedy import activity_selection_brute, activity_selection_greedy, egyptian_fractions
+from .fraction import Fraction
 
 class ActivitySelectionTests(unittest.TestCase):
     def test_activity_selection_brute(self):
@@ -45,3 +46,6 @@ class ActivitySelectionTests(unittest.TestCase):
         # self.assertEqual(12, ans3[2].denominator)
         # self.assertEqual(1, ans3[3].numerator)
         # self.assertEqual(156, ans3[3].denominator)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -80,3 +80,23 @@ def egyptian_fractions(fraction: Fraction) -> list[Fraction]:
         candidate.denominator += 1
 
     return components
+
+def job_sequencing_problem_greedy(jobs: list[tuple[str, int, int]]) -> list[str]:
+    """
+    Given a list of jobs and their deadline and profit values, select the
+    sequence of jobs that produce the maximum amount of profit. This assumes
+    that only one job can be worked at a time.
+
+    The result is returned in sorted order.
+    """
+    n = max(jobs, key=lambda job: job[1])[1] + 1
+    sorted_jobs = list(reversed(sorted(jobs, key=lambda job: job[2])))
+    slots = ['' for _ in range(n)]
+
+    for job in sorted_jobs:
+        for j in range(job[1], 0, -1):
+            if not slots[j]:
+                slots[j] = job[0]
+                break
+    
+    return list(filter(lambda slot: slot != '', slots))

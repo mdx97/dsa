@@ -110,7 +110,6 @@ class Trie:
 
         return current
 
-# https://www.geeksforgeeks.org/find-all-shortest-unique-prefixes-to-represent-each-word-in-a-given-list/
 def shortest_unique_prefix(trie: Trie) -> list[str]:
     """Returns a list of the shortest unique prefixes in the Trie."""
     prefixes = []

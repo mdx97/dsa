@@ -1,5 +1,5 @@
 import unittest
-from .greedy import activity_selection_brute, activity_selection_greedy, egyptian_fractions
+from .greedy import activity_selection_brute, activity_selection_greedy, egyptian_fractions, job_sequencing_problem_greedy
 from .fraction import Fraction
 
 class ActivitySelectionTests(unittest.TestCase):
@@ -46,6 +46,13 @@ class ActivitySelectionTests(unittest.TestCase):
         # self.assertEqual(12, ans3[2].denominator)
         # self.assertEqual(1, ans3[3].numerator)
         # self.assertEqual(156, ans3[3].denominator)
+    
+    def test_job_sequencing_problem(self):
+        jobs = [('a', 4, 20), ('b', 1, 10), ('c', 1, 40), ('d', 1, 30)]
+        self.assertCountEqual(['c', 'a'], job_sequencing_problem_greedy(jobs))
+
+        jobs = [('a', 2, 100), ('b', 1, 19), ('c', 2, 27), ('d', 1, 25), ('e', 3, 15)]
+        self.assertCountEqual(['a', 'c', 'e'], job_sequencing_problem_greedy(jobs))
 
 if __name__ == '__main__':
     unittest.main()
